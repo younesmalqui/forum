@@ -1,0 +1,25 @@
+{{define "header.html"}} {{if .User}}
+<header id="header">
+  <div class="container flex align-center justify-between">
+    <div class="logo"><a href="/">Forum</a></div>
+    <a style="text-decoration: none" href="/logout">
+      <div class="user-data flex gap-2 align-center">
+        <span class="user-photo flex align-center justify-center"
+          >{{firstChar .User.Username}}</span
+        >
+        <span class="user-name">logout</span>
+      </div>
+    </a>
+  </div>
+</header>
+{{else}}
+<header id="header">
+  <div class="container flex align-center justify-between">
+    <div class="logo"><a href="/">Forum</a></div>
+    <ul class="header-links flex gap-2">
+      <li><a class="primary-link" href="/login">Login</a></li>
+      <li><a class="primary-link" href="/register">Register</a></li>
+    </ul>
+  </div>
+</header>
+{{end}} {{end}}

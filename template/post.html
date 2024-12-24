@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;600;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="stylesheet" href="/static/css/utils.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <title>{{.Title}}</title>
+    <script type="module" src="/static/js/comment.js"></script>
+  </head>
+  <body>
+    {{template "header.html" .}}
+    <article id="post">
+      <h2 class="post-title">{{.Data.Post.Title}}</h2>
+      <p class="post-content">{{.Data.Post.Content}}</p>
+
+      <section
+        data-id="{{.Data.Post.ID}}"
+        id="comment_section"
+        class="comments"
+      >
+        {{if .User}}
+        <h4>Leave a Comment</h4>
+        <form
+          id="commentForm"
+          data-postId="{{.Data.Post.ID}}"
+          class="flex flex-colum gap-3"
+          action="#"
+          method="post"
+        >
+          <textarea id="comment" name="comment" rows="4" required></textarea>
+          <button type="submit">Comment</button>
+        </form>
+        {{end}}
+        <h3>Comments</h3>
+        <div id="comment-list">
+          {{range .Data.Comments}}
+          <div data-id="{{.ID}}" class="comment">
+            <p class="comment-info">
+              <strong>{{.Username}}</strong>
+              <em>{{.CreatedAt.Format "2006 Jan 02"}}</em>
+            </p>
+            <p class="commnet-content">{{.Comment}}</p>
+            <div class="comment-actions flex align-center">
+              <div class="like-box">
+                <button class="like-up like-btn-comment">
+                  <i class="fa-solid fa-chevron-up"></i>
+                </button>
+                <span class="like-count">{{.Likes}}</span>
+              </div>
+              <div class="like-box">
+                <span class="like-count">{{.DisLikes}}</span>
+                <button class="like-down like-btn-comment">
+                  <i class="fa-solid fa-chevron-down"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          {{end}}
+        </div>
+      </section>
+    </article>
+  </body>
+</html>

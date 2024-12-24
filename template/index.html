@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;600;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="stylesheet" href="/static/css/utils.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <script type="module" src="/static/js/indexHandler.js"></script>
+    <title>{{.Title}}</title>
+  </head>
+  <body>
+    {{template "header.html" .}}
+    <div class="container">
+      <main id="main">
+        <aside id="sidebar">
+          <div
+            class="filter flex gap-3 flex-colum justify-between align-center"
+          >
+            <form
+              action="/filter"
+              id="filter-form"
+              class="flex flex-colum gap-4"
+              method="get"
+            >
+              <input
+                type="text"
+                placeholder="filtre by categories"
+                autocomplete="off"
+                name="query"
+              />
+              <div class="personal-filter flex justify-between">
+                <select class="filter-option" name="options">
+                  <option value="0">all</option>
+                  {{if .User}}
+                  <option value="1">my posts</option>
+                  <option value="2">liked posts</option>
+                  {{end}}
+                </select>
+              </div>
+              <button>filter</button>
+            </form>
+          </div>
+        </aside>
+
+        <section id="posts" class="flex flex-colum gap-4">
+          {{if .User}}
+          <form
+            id="new_post_form"
+            class="flex flex-colum gap-3"
+            action="/"
+            method="post"
+          >
+            <div class="box"></div>
+            <input
+              type="text"
+              placeholder="Title"
+              name="title"
+              class="post-content-input"
+            />
+            <textarea
+              class="post-content-input"
+              name="content"
+              rows="4"
+              placeholder="write something"
+            ></textarea>
+            <input
+              type="text"
+              placeholder="tags seperated by comma"
+              name="tags"
+              class="post-content-input"
+            />
+            <button class="create-post">Create new post</button>
+          </form>
+          {{end}} {{if len .Data.Posts}} {{range .Data.Posts}}
+          <div data-id="{{.ID}}" class="post flex gap-5">
+            <div class="like flex flex-colum align-center justify-between">
+              <a class="like-up flex flex-colum" href="#"
+                ><i class="fa-solid fa-chevron-up"></i>
+                <span class="like-count">{{.Likes}}</span>
+              </a>
+              <a class="like-down flex flex-colum text-center" href="#">
+                <span class="like-count">{{.Dislikes}}</span>
+                <i class="fa-solid fa-chevron-down"></i
+              ></a>
+            </div>
+            <div class="content">
+              <a href="/post/{{.ID}}" class="title"> {{.Title}} </a>
+              <div class="info flex gap-2 align-center">
+                <i class="fa-regular fa-calendar-days"></i>
+                <span>{{.CreatedAt.Format "2006 Jan 02"}}</span>
+                <p>
+                  By <span><a href="#">{{.Username}}</a></span>
+                </p>
+              </div>
+              <div class="tags flex gap-2 mb-2">
+                {{range .Tags}}
+                <a href="/filter?query={{.}}" class="tag">{{.}}</a>
+                {{end}}
+              </div>
+              <p class="post-content">{{.Content}}</p>
+            </div>
+          </div>
+          {{end}} {{else}}
+          <div class="error">No posts</div>
+          {{end}}
+          <ul class="pagination flex gap-4 m-auto">
+            {{if gt .Data.CurrentPage 1}}
+            <a href="?page={{sub .Data.CurrentPage 1}}">Previous</a>
+            {{end}} {{if lt .Data.CurrentPage .Data.TotalPages}}
+            <a href="?page={{add .Data.CurrentPage 1}}">Next</a>
+            {{end}}
+          </ul>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;600;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="stylesheet" href="/static/css/utils.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <title>registration</title>
+  </head>
+  <body>
+    {{template "header.html"}}
+    <form id="login-form" class="flex flex-colum gap-4" method="post">
+      <h2>Create a new account</h2>
+      <div class="box"></div>
+      <input type="text" placeholder="Email" name="email" />
+      <input type="text" placeholder="Username" name="username" />
+      <input type="password" placeholder="Password" name="password" />
+      <button type="submit">new Account</button>
+    </form>
+
+    <script>
+      let formEl = document.getElementById("login-form");
+      let boxEl = document.querySelector(".box");
+      formEl.addEventListener("submit", (e) => {
+        e.preventDefault();
+        let form = new FormData(formEl);
+        let data = {
+          email: form.get("email").trim(),
+          username: form.get("username").trim(),
+          password: form.get("password").trim(),
+        };
+
+        register(data);
+      });
+
+      async function register(userData) {
+        try {
+          const response = await fetch("/api/register", {
+            method: "POST",
+            body: JSON.stringify(userData),
+          });
+          let responseData = await response.json();
+          if (!response.ok) {
+            writeError(responseData.message);
+          } else {
+            writeSucc(responseData.message);
+            setTimeout(() => {
+              window.location.assign("/login");
+            }, 1500);
+          }
+        } catch (error) {}
+      }
+
+      function writeError(msg) {
+        boxEl.classList.remove("success");
+        boxEl.classList.add("error");
+        boxEl.innerHTML = msg;
+      }
+
+      function writeSucc(msg) {
+        boxEl.classList.remove("error");
+        boxEl.classList.add("success");
+        boxEl.innerHTML = msg;
+      }
+    </script>
+  </body>
+</html>

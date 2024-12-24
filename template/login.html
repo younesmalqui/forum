@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;400;600;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="/static/css/style.css" />
+    <link rel="stylesheet" href="/static/css/utils.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+
+    <title>login</title>
+  </head>
+  <body>
+    {{template "header.html"}}
+    <form action="" id="login-form" class="flex flex-colum gap-4" method="post">
+      <h2>Login to your account</h2>
+      {{if eq .Method "POST"}} {{if .Error}}
+      <div class="error">{{.Error}}</div>
+      {{else}}
+      <meta http-equiv="refresh" content="1; URL=/" />
+      <div class="success">Login successful</div>
+      {{end}} {{end}}
+      <input type="text" placeholder="Username" name="username" />
+      <input type="password" placeholder="Password" name="password" />
+      <button type="submit">Login</button>
+    </form>
+  </body>
+</html>
